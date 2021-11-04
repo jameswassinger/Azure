@@ -1,0 +1,54 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "routeTableName": {
+            "value": "rt-net"
+        },
+        "bastionHostName": {
+            "value": "bas-net"
+        },
+        "bastionHostAddressPrefix": {
+            "value": "0.0.0.0/0"
+        },
+        "virtualNetworkName": {
+            "value": "vnet-net"
+        },
+        "virtualNetworkAddressPrefix": {
+            "value": "0.0.0.0/0"
+        },
+        "virtualNetworkBackendSubnetName": {
+            "value": "snet-backend"
+        },
+        "virtualNetworkBackendSubnetPrefix": {
+            "value": "0.0.0.0/0"
+        },
+        "virtualNetworkFrontendSubnetName": {
+            "value": "snet-frontend"
+        },
+        "virtualNetworkFrontendSubnetPrefix": {
+            "value": "0.0.0.0/0"
+        },
+        "virtualNetworkSubnet0Name": {
+            "value": "snet-user0"
+        },
+        "virtualNetworkSubnet0Prefix": {
+            "value": "0.0.0.0/0"
+        },
+        "virtualNetworkSubnet1Name": {
+            "value": "snet-user1"
+        },
+        "virtualNetworkSubnet1Prefix": {
+            "value": "0.0.0.0/0"
+        },
+        "VnetNetworkSecurityGroupName": {
+            "value": "nsg-net"
+        },
+        "bastionPublicIpAddress": {
+            "value": "pip-bas-net"
+        },
+        "bastionNetworkSecurityGroupName": {
+            "value": "nsg-azurebastionsubnet"
+        }
+    }
+}
