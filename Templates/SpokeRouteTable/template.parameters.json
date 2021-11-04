@@ -1,0 +1,78 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "routeTable_Name": {
+            "value": "rt-net",
+            "metadata": {
+                "description": "Name of the route table."
+            }
+        },
+        "routeTable_Firewall_NextHop_Ip": {
+            "value": "0.0.0.0",
+            "metadata": {
+                "description": "IP Address of the Firewall."
+            }
+        },
+        "routeTable_Firewall_RouteName": {
+            "value": "UDR-FIREWALL-INTERNAL",
+            "metadata": {
+                "description": "Route name to firewall address space."
+            }
+        },
+        "routeTable_Firewall_AddressPrefix": {
+            "value": "0.0.0.0/0",
+            "metadata": {
+                "description": "Address space of the Firewall."
+            }
+        },
+        "routeTable_Peered_Vnet_RouteName": {
+            "value": "UDR-VNET-PEER",
+            "metadata": {
+                "description": "Route name to the peered vnet."
+            }
+        },
+        "routeTable_Peered_Vnet_AddressPrefix": {
+            "value": "0.0.0.0/0",
+            "metadata": {
+                "description": "Address space of the peered vnet."
+            }
+        },
+        "routeTable_Self_Vnet_RouteName": {
+            "value": "UDR-VNET",
+            "metadata": {
+                "description": "Route name to route table vnet."
+            }
+        },
+        "routeTable_Self_Vnet_AddressPrefix": {
+            "value": "0.0.0.0/0",
+            "metadata": {
+                "description": "Address space of the route table vnet."
+            }
+        },
+        "routeTable_Self_Vnet_Subnet1_RouteName": {
+            "value": "UDR-SUBNET1-TO-SELF",
+            "metadata": {
+                "description": "Route name to subnet1 of the route table vnet."
+            }
+        },
+        "routeTable_Self_Vnet_Subnet1_AddressPrefix": {
+            "value": "0.0.0.0/0",
+            "metadata": {
+                "description": "Address space of subnet1 within the route table vnet."
+            }
+        },
+        "routeTable_Self_Vnet_Subnet2_RouteName": {
+            "value": "UDR-SUBNET2-TO-SELF",
+            "metadata": {
+                "description": "Route name to subnet2 of the route table vnet."
+            }
+        },
+        "routeTable_Self_Vnet_Subnet2_AddressPrefix": {
+            "value": "0.0.0.0/0",
+            "metadata": {
+                "description": "Address space of subnet2 within the route table vnet."
+            }
+        }
+    }
+}
