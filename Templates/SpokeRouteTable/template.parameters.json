@@ -3,76 +3,40 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "routeTableName": {
-            "value": "rt-net",
-            "metadata": {
-                "description": "Name of the route table."
-            }
+            "value": "rt-net"
         },
-        "routeTable_Firewall_NextHop_Ip": {
-            "value": "0.0.0.0",
-            "metadata": {
-                "description": "IP Address of the Firewall."
-            }
+        "routeTableFirewallNextHopIp": {
+            "value": "0.0.0.0"
         },
-        "routeTable_Firewall_RouteName": {
-            "value": "UDR-FIREWALL-INTERNAL",
-            "metadata": {
-                "description": "Route name to firewall address space."
-            }
+        "routeTableFirewallRouteName": {
+            "value": "UDR-FIREWALL-INTERNAL"
         },
-        "routeTable_Firewall_AddressPrefix": {
-            "value": "0.0.0.0/0",
-            "metadata": {
-                "description": "Address space of the Firewall."
-            }
+        "routeTableFirewallAddressPrefix": {
+            "value": "0.0.0.0/0"
         },
-        "routeTable_Peered_Vnet_RouteName": {
-            "value": "UDR-VNET-PEER",
-            "metadata": {
-                "description": "Route name to the peered vnet."
-            }
+        "routeTablePeeredVnetRouteName": {
+            "value": "UDR-VNET-PEER"
         },
-        "routeTable_Peered_Vnet_AddressPrefix": {
-            "value": "0.0.0.0/0",
-            "metadata": {
-                "description": "Address space of the peered vnet."
-            }
+        "routeTablePeeredVnetAddressPrefix": {
+            "value": "0.0.0.0/0"
         },
-        "routeTable_Self_Vnet_RouteName": {
-            "value": "UDR-VNET",
-            "metadata": {
-                "description": "Route name to route table vnet."
-            }
+        "routeTableSelfVnetRouteName": {
+            "value": "UDR-VNET"
         },
-        "routeTable_Self_Vnet_AddressPrefix": {
-            "value": "0.0.0.0/0",
-            "metadata": {
-                "description": "Address space of the route table vnet."
-            }
+        "routeTableSelfVnetAddressPrefix": {
+            "value": "0.0.0.0/0"
         },
-        "routeTable_Self_Vnet_Subnet1_RouteName": {
-            "value": "UDR-SUBNET1-TO-SELF",
-            "metadata": {
-                "description": "Route name to subnet1 of the route table vnet."
-            }
+        "routeTableSelfVnetSubnet1RouteName": {
+            "value": "UDR-SUBNET1-TO-SELF"
         },
-        "routeTable_Self_Vnet_Subnet1_AddressPrefix": {
-            "value": "0.0.0.0/0",
-            "metadata": {
-                "description": "Address space of subnet1 within the route table vnet."
-            }
+        "routeTableSelfVnetSubnet1AddressPrefix": {
+            "value": "0.0.0.0/0"
         },
-        "routeTable_Self_Vnet_Subnet2_RouteName": {
-            "value": "UDR-SUBNET2-TO-SELF",
-            "metadata": {
-                "description": "Route name to subnet2 of the route table vnet."
-            }
+        "routeTableSelfVnetSubnet2RouteName": {
+            "value": "UDR-SUBNET2-TO-SELF"
         },
-        "routeTable_Self_Vnet_Subnet2_AddressPrefix": {
-            "value": "0.0.0.0/0",
-            "metadata": {
-                "description": "Address space of subnet2 within the route table vnet."
-            }
+        "routeTableSelfVnetSubnet2AddressPrefix": {
+            "value": "0.0.0.0/0"
         }
     }
 }
