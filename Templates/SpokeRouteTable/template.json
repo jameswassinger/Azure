@@ -4,62 +4,98 @@
     "parameters": {
         "routeTable_Name": {
             "defaultValue": "rt-net",
-            "type": "String"
+            "type": "String",
+            "metadata": {
+                "description": "Route table name"
+            }
         },
 
         "routeTable_Firewall_NextHop_Ip": {
             "defaultValue": "0.0.0.0",
-            "type": "string"
+            "type": "string",
+            "metadata": {
+                "description": "Hub firewall internal IP address"
+            }
         }, 
 
         "routeTable_Firewall_RouteName": {
             "defaultValue": "UDR-FIREWALL-INTERNAL",
-            "type": "string"
+            "type": "string",
+            "metadata": {
+                "description": "Firewall route table route name"
+            }
         },
 
         "routeTable_Firewall_AddressPrefix": {
             "defaultValue": "0.0.0.0/0",
-            "type": "string"
+            "type": "string",
+            "metadata": {
+                "description": "Firewall address space"
+            }
         },
 
         "routeTable_Peered_Vnet_RouteName": {
             "defaultValue": "UDR-VNET-PEER",
-            "type": "string"
+            "type": "string",
+            "metadata": {
+                "description": "Hub vnet route table route name"
+            }
         },
 
         "routeTable_Peered_Vnet_AddressPrefix" : {
             "defaultValue": "0.0.0.0/0",
-            "type": "string"
+            "type": "string",
+            "metadata": {
+                "description": "Hub vnet address space"
+            }
         },
 
         "routeTable_Self_Vnet_RouteName": {
             "defaultValue": "UDR-VNET",
-            "type": "string"
+            "type": "string",
+            "metadata": {
+                "description": "Vnet route table route name"
+            }
         },
 
         "routeTable_Self_Vnet_AddressPrefix": {
             "defaultValue": "0.0.0.0/0",
-            "type": "string"
+            "type": "string",
+            "metadata": {
+                "description": "Vnet address space"
+            }
         },
 
         "routeTable_Self_Vnet_Subnet1_RouteName": {
             "defaultValue": "UDR-SUBNET1-TO-SELF",
-            "type": "string"
+            "type": "string",
+            "metadata": {
+                "description": "Subnet1 route table route name"
+            }
         },
 
         "routeTable_Self_Vnet_Subnet1_AddressPrefix": {
             "defaultValue": "0.0.0.0/0",
-            "type": "string"
+            "type": "string",
+            "metadata": {
+                "description": "Subnet1 address space"
+            }
         },
 
         "routeTable_Self_Vnet_Subnet2_RouteName": {
             "defaultValue": "UDR-SUBNET2-TO-SELF",
-            "type": "string"
+            "type": "string",
+            "metadata": {
+                "description": "Subnet2 route table route name"
+            }
         },
 
         "routeTable_Self_Vnet_Subnet2_AddressPrefix": {
             "defaultValue": "0.0.0.0/0",
-            "type": "string"
+            "type": "string",
+            "metadata": {
+                "description": "Subnet2 address space"
+            }
         }
     },
     "variables": {},
