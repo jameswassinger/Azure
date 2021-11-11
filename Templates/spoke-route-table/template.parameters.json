@@ -3,40 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "routeTableName": {
-            "value": "rt-net"
+            "value": "rt-default"
         },
-        "routeTableFirewallNextHopIp": {
+        "routeTableNextHop": {
             "value": "0.0.0.0"
-        },
-        "routeTableFirewallRouteName": {
-            "value": "UDR-FIREWALL-INTERNAL"
-        },
-        "routeTableFirewallAddressPrefix": {
-            "value": "0.0.0.0/0"
-        },
-        "routeTablePeeredVnetRouteName": {
-            "value": "UDR-VNET-PEER"
-        },
-        "routeTablePeeredVnetAddressPrefix": {
-            "value": "0.0.0.0/0"
-        },
-        "routeTableSelfVnetRouteName": {
-            "value": "UDR-VNET"
-        },
-        "routeTableSelfVnetAddressPrefix": {
-            "value": "0.0.0.0/0"
-        },
-        "routeTableSelfVnetSubnet1RouteName": {
-            "value": "UDR-SUBNET1-TO-SELF"
-        },
-        "routeTableSelfVnetSubnet1AddressPrefix": {
-            "value": "0.0.0.0/0"
-        },
-        "routeTableSelfVnetSubnet2RouteName": {
-            "value": "UDR-SUBNET2-TO-SELF"
-        },
-        "routeTableSelfVnetSubnet2AddressPrefix": {
-            "value": "0.0.0.0/0"
         }
     }
 }
