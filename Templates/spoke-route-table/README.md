@@ -5,6 +5,6 @@
 # Azure Route Table
 
 ## Purpose
-Azure route table for a spoke within a Hub and Spoke Architecture.
+Simple route table that forces traffic to NVA.
 
 > ***Warning***, the route table is not associated to any subnets. 
