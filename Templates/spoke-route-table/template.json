@@ -3,98 +3,18 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "routeTableName": {
-            "defaultValue": "rt-net",
+            "defaultValue": "rt-default",
             "type": "String",
             "metadata": {
-                "description": "Provide a name for the route table, e.g., rt-*."
+                "description": "Specific the name of the route table."
             }
         },
 
-        "routeTableFirewallNextHopIp": {
+        "routeTableNextHop": {
             "defaultValue": "0.0.0.0",
             "type": "string",
             "metadata": {
-                "description": "Hub firewall internal IP address."
-            }
-        }, 
-
-        "routeTableFirewallRouteName": {
-            "defaultValue": "UDR-FIREWALL-INTERNAL",
-            "type": "string",
-            "metadata": {
-                "description": "Name for route to the hub vnet."
-            }
-        },
-
-        "routeTableFirewallAddressPrefix": {
-            "defaultValue": "0.0.0.0/0",
-            "type": "string",
-            "metadata": {
-                "description": "Address space of the hub firewall."
-            }
-        },
-
-        "routeTablePeeredVnetRouteName": {
-            "defaultValue": "UDR-VNET-PEER",
-            "type": "string",
-            "metadata": {
-                "description": "Route name to the hub vnet."
-            }
-        },
-
-        "routeTablePeeredVnetAddressPrefix" : {
-            "defaultValue": "0.0.0.0/0",
-            "type": "string",
-            "metadata": {
-                "description": "Hub vnet address space."
-            }
-        },
-
-        "routeTableSelfVnetRouteName": {
-            "defaultValue": "UDR-VNET",
-            "type": "string",
-            "metadata": {
-                "description": "Route name for the vnet the route table belongs to."
-            }
-        },
-
-        "routeTableSelfVnetAddressPrefix": {
-            "defaultValue": "0.0.0.0/0",
-            "type": "string",
-            "metadata": {
-                "description": "Address space for the vnet the route table belongs to."
-            }
-        },
-
-        "routeTableSelfVnetSubnet1RouteName": {
-            "defaultValue": "UDR-SUBNET1-TO-SELF",
-            "type": "string",
-            "metadata": {
-                "description": "Route name for Subnet1."
-            }
-        },
-
-        "routeTableSelfVnetSubnet1AddressPrefix": {
-            "defaultValue": "0.0.0.0/0",
-            "type": "string",
-            "metadata": {
-                "description": "Address space for Subnet1."
-            }
-        },
-
-        "routeTableSelfVnetSubnet2RouteName": {
-            "defaultValue": "UDR-SUBNET2-TO-SELF",
-            "type": "string",
-            "metadata": {
-                "description": "Route name for Subnet2."
-            }
-        },
-
-        "routeTableSelfVnetSubnet2AddressPrefix": {
-            "defaultValue": "0.0.0.0/0",
-            "type": "string",
-            "metadata": {
-                "description": "Address space for Subnet2."
+                "description": "Enter the next hop IP address."
             }
         }
     },
@@ -109,54 +29,11 @@
                 "disableBgpRoutePropagation": true,
                 "routes": [
                     {
-                        "name": "UDR-Default",
+                        "name": "default",
                         "properties": {
                             "addressPrefix": "0.0.0.0/0",
                             "nextHopType": "VirtualAppliance",
-                            "nextHopIpAddress": "[parameters('routeTableFirewallNextHopIp')]",
-                            "hasBgpOverride": false
-                        }
-                    },
-                    {
-                        "name": "[parameters('routeTableFirewallRouteName')]",
-                        "properties": {
-                            "addressPrefix": "[parameters('routeTableFirewallAddressPrefix')]",
-                            "nextHopType": "VirtualAppliance",
-                            "nextHopIpAddress": "[parameters('routeTableFirewallNextHopIp')]",
-                            "hasBgpOverride": false
-                        }
-                    },
-                    {
-                        "name": "[parameters('routeTablePeeredVnetRouteName')]",
-                        "properties": {
-                            "addressPrefix": "[parameters('routeTablePeeredVnetAddressPrefix')]",
-                            "nextHopType": "VirtualAppliance",
-                            "nextHopIpAddress": "[parameters('routeTableFirewallNextHopIp')]",
-                            "hasBgpOverride": false
-                        }
-                    },
-                    {
-                        "name": "[parameters('routeTableSelfVnetRouteName')]",
-                        "properties": {
-                            "addressPrefix": "[parameters('routeTableSelfVnetAddressPrefix')]",
-                            "nextHopType": "VirtualAppliance",
-                            "nextHopIpAddress": "[parameters('routeTableFirewallNextHopIp')]",
-                            "hasBgpOverride": false
-                        }
-                    },
-                    {
-                        "name": "[parameters('routeTableSelfVnetSubnet1RouteName')]",
-                        "properties": {
-                            "addressPrefix": "[parameters('routeTableSelfVnetSubnet1AddressPrefix')]",
-                            "nextHopType": "VnetLocal",
-                            "hasBgpOverride": false
-                        }
-                    },
-                    {
-                        "name": "[parameters('routeTableSelfVnetSubnet2RouteName')]",
-                        "properties": {
-                            "addressPrefix": "[parameters('routeTableSelfVnetSubnet2AddressPrefix')]",
-                            "nextHopType": "VnetLocal",
+                            "nextHopIpAddress": "[parameters('routeTableNextHop')]",
                             "hasBgpOverride": false
                         }
                     }
@@ -166,82 +43,14 @@
         {
             "type": "Microsoft.Network/routeTables/routes",
             "apiVersion": "2020-11-01",
-            "name": "[concat(parameters('routeTableName'), '/UDR-Default')]",
+            "name": "[concat(parameters('routeTableName'), '/default')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/routeTables', parameters('routeTableName'))]"
             ],
             "properties": {
                 "addressPrefix": "0.0.0.0/0",
                 "nextHopType": "VirtualAppliance",
-                "nextHopIpAddress": "[parameters('routeTableFirewallNextHopIp')]",
-                "hasBgpOverride": false
-            }
-        },
-        {
-            "type": "Microsoft.Network/routeTables/routes",
-            "apiVersion": "2020-11-01",
-            "name": "[concat(parameters('routeTableName'), concat('/',parameters('routeTableFirewallRouteName')))]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/routeTables', parameters('routeTableName'))]"
-            ],
-            "properties": {
-                "addressPrefix": "[parameters('routeTableFirewallAddressPrefix')]",
-                "nextHopType": "VirtualAppliance",
-                "nextHopIpAddress": "[parameters('routeTableFirewallNextHopIp')]",
-                "hasBgpOverride": false
-            }
-        },
-        {
-            "type": "Microsoft.Network/routeTables/routes",
-            "apiVersion": "2020-11-01",
-            "name": "[concat(parameters('routeTableName'), concat('/',parameters('routeTableSelfVnetSubnet1RouteName')))]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/routeTables', parameters('routeTableName'))]"
-            ],
-            "properties": {
-                "addressPrefix": "[parameters('routeTableSelfVnetSubnet1AddressPrefix')]",
-                "nextHopType": "VnetLocal",
-                "hasBgpOverride": false
-            }
-        },
-        {
-            "type": "Microsoft.Network/routeTables/routes",
-            "apiVersion": "2020-11-01",
-            "name": "[concat(parameters('routeTableName'), concat('/', parameters('routeTableSelfVnetSubnet2RouteName')))]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/routeTables', parameters('routeTableName'))]"
-            ],
-            "properties": {
-                "addressPrefix": "[parameters('routeTableSelfVnetSubnet2AddressPrefix')]",
-                "nextHopType": "VnetLocal",
-                "hasBgpOverride": false
-            }
-        },
-        {
-            "type": "Microsoft.Network/routeTables/routes",
-            "apiVersion": "2020-11-01",
-            "name": "[concat(parameters('routeTableName'), concat('/',parameters('routeTableSelfVnetRouteName')))]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/routeTables', parameters('routeTableName'))]"
-            ],
-            "properties": {
-                "addressPrefix": "[parameters('routeTableSelfVnetAddressPrefix')]",
-                "nextHopType": "VirtualAppliance",
-                "nextHopIpAddress": "[parameters('routeTableFirewallNextHopIp')]",
-                "hasBgpOverride": false
-            }
-        },
-        {
-            "type": "Microsoft.Network/routeTables/routes",
-            "apiVersion": "2020-11-01",
-            "name": "[concat(parameters('routeTableName'), concat('/',parameters('routeTablePeeredVnetRouteName')))]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/routeTables', parameters('routeTableName'))]"
-            ],
-            "properties": {
-                "addressPrefix": "[parameters('routeTablePeeredVnetAddressPrefix')]",
-                "nextHopType": "VirtualAppliance",
-                "nextHopIpAddress": "[parameters('routeTableFirewallNextHopIp')]",
+                "nextHopIpAddress": "[parameters('routeTableNextHop')]",
                 "hasBgpOverride": false
             }
         }
