@@ -1,48 +1,50 @@
 {
-    "mode": "All",
-    "parameters": {
-      "policyEffects": {
-        "type": "String",
-        "metadata": {
-          "displayName": "Effect"
+  "mode": "All",
+  "policyRule": {
+    "if": {
+      "allOf": [
+        {
+          "field": "type",
+          "equals": "Microsoft.Authorization/roleAssignments"
         },
-        "allowedValues": [
-          "deny",
-          "audit"
-        ]
-      },
-      "policyRoleDefinitionId": {
-        "type": "String",
-        "metadata": {
-          "displayName": "Role Definition Id"
+        {
+          "field": "Microsoft.Authorization/roleAssignments/roleDefinitionId",
+          "contains": "[parameters('policyRoleDefinitionId')]"
+        },
+        {
+          "field": "Microsoft.Authorization/roleAssignments/principalId",
+          "equals": "[parameters('policyPrincipalObjectId')]"
         }
+      ]
+    },
+    "then": {
+      "effect": "[parameters('policyEffects')]"
+    }
+  },
+  "parameters": {
+    "policyEffects": {
+      "type": "String",
+      "metadata": {
+        "displayName": "Effect",
+        "description": null
       },
-      "policyPrincipalObjectId": {
-        "type": "String",
-        "metadata": {
-          "displayName": "Principal Id"
-        }
+      "allowedValues": [
+        "deny",
+        "audit"
+      ]
+    },
+    "policyRoleDefinitionId": {
+      "type": "String",
+      "metadata": {
+        "displayName": "Role Definition Id",
+        "description": null
       }
     },
-    "policyRule": {
-      "if": {
-        "allOf": [
-          {
-            "field": "type",
-            "equals": "Microsoft.Authorization/roleAssignments"
-          },
-          {
-            "field": "Microsoft.Authorization/roleAssignments/roleDefinitionId",
-            "contains": "[parameters('policyRoleDefinitionId')]"
-          },
-          {
-            "field": "Microsoft.Authorization/roleAssignments/principalId",
-            "equals": "[parameters('policyPrincipalObjectId')]"
-          }
-        ]
-      },
-      "then": {
-        "effect": "[parameters('policyEffects')]"
+    "policyPrincipalObjectId": {
+      "type": "String",
+      "metadata": {
+        "displayName": "Principal Id",
+        "description": null
       }
     }
   }
