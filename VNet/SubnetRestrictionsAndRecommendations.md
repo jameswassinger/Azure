@@ -20,7 +20,7 @@
 ```
 
 ## IP address restrictions within a subnet
-Azure reserves the firest 4 and last IP address for a total of 5 IP addresses. 
+Azure reserves the first 4 and last IP address for a total of 5 IP addresses. 
 ### Example
 Using range of 192.168.1.0/24 the below addresses would be reserved by Azure: 
 * 192.168.1.0 : Network address
