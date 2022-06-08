@@ -1,3 +1,8 @@
+## Min/Max supported subnet sizing
+* Min IPv4 - /29
+* Max IPv4 - /2
+* IPv6 must be exactly /64
+
 ## Ranges that can be used: 
 ```
 10.0.0.0 - 10.255.255.255 (10/8 prefix)
@@ -14,10 +19,21 @@
 168.63.129.16/32 (Internal DNS, DHCP, and Azure Load Balancer health probe)
 ```
 
+## IP address restrictions within a subnet
+Azure reserves the firest 4 and last IP address for a total of 5 IP addresses. 
+### Example
+Using range of 192.168.1.0/24 the below addresses would be reserved by Azure: 
+* 192.168.1.0 : Network address
+* 192.168.1.1 : Reserved by Azure for the default gateway
+* 192.168.1.2, 192.168.1.3 : Reserved by Azure to map the Azure DNS IPs to the VNet space
+* 192.168.1.255 : Network broadcast address.
+
 ## Dedicated subnet recommendations
 * GatewaySubnet /27
 * AzureFirewallSubnet /26
 * AzureBastionSubnet /26
+
+see, https://docs.microsoft.com/en-us/azure/virtual-network/virtual-network-for-azure-services
 
 ## Application Gateway
 
