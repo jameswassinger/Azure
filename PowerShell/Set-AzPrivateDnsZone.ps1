@@ -36,7 +36,7 @@ Will pull all VNets within all subscriptions except for the Human Resource and I
 Will pull all VNets within all subscriptions and create a VNet link to all Private DNS Zones except for privatelink.database.windows.net and privatelink.monitor.azure.com
 #>
 
-[CmdletBinding()]
+[CmdletBinding(SupportsShouldProcess)]
 param(
     [Parameter(HelpMessage="Enter Private DNS Zone names.")]
     [String[]]
@@ -81,7 +81,11 @@ Set-AzContext $SubscriptionName -WarningAction Ignore -ErrorAction Stop | Out-Nu
 
 
 Write-Verbose "Get all Private DNS Zone names"
-$AllPrivateDnsZoneNames = $(Get-AzPrivateDnsZone -ErrorAction Stop | Where-Object { $_.Name -notin $ExcludePrivateDnsZone }).Name
+if($PrivateDnsZones) {
+    $AllPrivateDnsZoneNames = $PrivateDnsZones
+} else {
+    $AllPrivateDnsZoneNames = $(Get-AzPrivateDnsZone -ErrorAction Stop | Where-Object { $_.Name -notin $ExcludePrivateDnsZone }).Name
+}
 
 Write-Verbose "Get all subscription names"
 $allSubscriptions = Get-AzSubscription -WarningAction Ignore -ErrorAction Stop | Where-Object { $_.Name -notin $ExcludeSubscription }
@@ -97,11 +101,11 @@ $allSubscriptions | ForEach-Object {
     $VNET = Get-AzVirtualNetwork
 
     if($VNET) {
-        Write-Verbose "`nAdding entry"
-        Write-Verbose "Subscription: $($subName)"
-        Write-Verbose "VNet: $($_.Name)"
-        Write-Verbose "VNetId: $($_.Id)"
         $VNET | ForEach-Object {
+            Write-Verbose "`nAdding entry"
+            Write-Verbose "Subscription: $($subName)"
+            Write-Verbose "VNet: $($_.Name)"
+            Write-Verbose "VNetId: $($_.Id)"
             $vnetProperties.Add(
                 [PSCustomObject]@{
                     subscriptionName = $subName
@@ -133,12 +137,12 @@ $vnetProperties | ForEach-Object {
 
         if($Existing) {
             Write-Host "Removing the existing link."
-            Remove-AzPrivateDnsVirtualNetworkLink -ResourceId $($Existing).ResourceId -ErrorAction Stop
+            #Remove-AzPrivateDnsVirtualNetworkLink -ResourceId $($Existing).ResourceId -ErrorAction Stop
         } 
 
         Write-Host "Subscription: $($sub)"
         Write-Host "Link Name: $($linkName) & ID: $($vNetId)"
-        New-AzPrivateDnsVirtualNetworkLink -ZoneName $_ -ResourceGroupName $ResourceGroupName -Name $linkName -VirtualNetworkId $vNetId -ErrorAction Stop | Out-Null
+        #New-AzPrivateDnsVirtualNetworkLink -ZoneName $_ -ResourceGroupName $ResourceGroupName -Name $linkName -VirtualNetworkId $vNetId -ErrorAction Stop | Out-Null
     }
 
 }
