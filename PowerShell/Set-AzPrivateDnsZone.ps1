@@ -66,127 +66,79 @@ param(
 
 )
 
+# Script error handling. 
+trap [System.Exception] { 
+    "An unexpected error has occurred! $($_)"
+    break 
+}
+
+
 # Login into Azure
-try {
+Connect-AzAccount -Tenant $TenantId -WarningAction Ignore -ErrorAction Stop | Out-Null
 
-    Connect-AzAccount -Tenant $TenantId -WarningAction Ignore | Out-Null
+# Set context to the subscription that holds the private dns zones. 
+Set-AzContext $SubscriptionName -WarningAction Ignore -ErrorAction Stop | Out-Null
 
-} catch {
-    throw "Could not connect to Azure. $($_)"
-}
 
-try {
+Write-Verbose "Get all Private DNS Zone names"
+$AllPrivateDnsZoneNames = $(Get-AzPrivateDnsZone -ErrorAction Stop | Where-Object { $_.Name -notin $ExcludePrivateDnsZone }).Name
 
-    Set-AzContext $SubscriptionName -WarningAction Ignore | Out-Null
-
-} catch {
-    throw "Failed to set the context to $($SubscriptionName). $($_)"
-}
-
-try {
-
-    Write-Verbose "Get all Private DNS Zone names"
-    $AllPrivateDnsZoneNames = $(Get-AzPrivateDnsZone | Where-Object { $_.Name -notin $ExcludePrivateDnsZone }).Name
-
-} catch {
-    throw "Failed to get all Private DNS Zone names. $($_)"
-}
-
-try {
-
-    Write-Verbose "Get all subscription names"
-    $allSubscriptions = Get-AzSubscription -WarningAction Ignore | Where-Object { $_.Name -notin $ExcludeSubscription }
-
-} catch {
-    throw "Failed to get all subscription names. $($_)"
-}
+Write-Verbose "Get all subscription names"
+$allSubscriptions = Get-AzSubscription -WarningAction Ignore -ErrorAction Stop | Where-Object { $_.Name -notin $ExcludeSubscription }
 
 $vnetProperties = New-Object System.Collections.Generic.List[PSObject]
 
-try {
+$allSubscriptions | ForEach-Object {
 
-    $allSubscriptions | ForEach-Object {
+    $subName = $_.Name
 
-        $subName = $_.Name
+    Set-AzContext $subName -WarningAction Ignore -ErrorAction Stop | Out-Null
 
-        Set-AzContext $subName -WarningAction Ignore | Out-Null
+    $VNET = Get-AzVirtualNetwork
 
-        $VNET = Get-AzVirtualNetwork
+    if($VNET) {
+        Write-Verbose "`nAdding entry"
+        Write-Verbose "Subscription: $($subName)"
+        Write-Verbose "VNet: $($_.Name)"
+        Write-Verbose "VNetId: $($_.Id)"
+        $VNET | ForEach-Object {
+            $vnetProperties.Add(
+                [PSCustomObject]@{
+                    subscriptionName = $subName
+                    vnetName = $_.Name
+                    vnetId = $_.Id
 
-        if($VNET) {
-            Write-Verbose "`nAdding entry"
-            Write-Verbose "Subscription: $($subName)"
-            Write-Verbose "VNet: $($_.Name)"
-            Write-Verbose "VNetId: $($_.Id)"
-            $VNET | ForEach-Object {
-                $vnetProperties.Add(
-                    [PSCustomObject]@{
-                        subscriptionName = $subName
-                        vnetName = $_.Name
-                        vnetId = $_.Id
-
-                    }
-                )
-            }
-        }
-    }
-
-} catch {
-    throw "Could not set the vnet properties. $($_)"
-}
-
-try {
-
-    Write-Verbose "Context changed to $($SubscriptionName)"
-    Set-AzContext $SubscriptionName -WarningAction Ignore | Out-Null
-
-} catch {
-    throw "Failed to set context to $($SubscriptionName). $($_)"
-}
-
-
-try {
-
-    $vnetProperties | ForEach-Object {
-        $sub = $_.subscriptionName
-        $Name = $_.vnetName
-        $Id = $_.vnetId
-    
-        $linkName = "link-to-$($Name)"
-        $vNetId = $Id
-
-        $AllPrivateDnsZoneNames | ForEach-Object {
-
-            Write-Host "`nZoneName: $($_)"
-
-            $Existing = Get-AzPrivateDnsVirtualNetworkLink -ResourceGroupName $ResourceGroupName -ZoneName $_  -ErrorAction SilentlyContinue | Where-Object { $_.VirtualNetworkId -eq $vNetId }
-
-            if($Existing) {
-
-                try {
-
-                    Write-Host "Removing the existing link."
-                    Remove-AzPrivateDnsVirtualNetworkLink -ResourceId $($Existing).ResourceId
-
-                } catch {
-                    throw "failed to remove the existing private link. $($_)"
                 }
-
-            }
-            
-            try {
-
-                Write-Host "Subscription: $($sub)"
-                Write-Host "Link Name: $($linkName) & ID: $($vNetId)"
-                New-AzPrivateDnsVirtualNetworkLink -ZoneName $_ -ResourceGroupName $ResourceGroupName -Name $linkName -VirtualNetworkId $vNetId | Out-Null
-
-            } catch {
-                throw "Failed to create the private link. $($_)"
-            } 
+            )
         }
+    }
+}
 
+Write-Verbose "Context changed to $($SubscriptionName)"
+Set-AzContext $SubscriptionName -WarningAction Ignore -ErrorAction Stop | Out-Null
+
+$vnetProperties | ForEach-Object {
+    $sub = $_.subscriptionName
+    $Name = $_.vnetName
+    $Id = $_.vnetId
+    
+    $linkName = "link-to-$($Name)"
+    $vNetId = $Id
+
+    $AllPrivateDnsZoneNames | ForEach-Object {
+
+        Write-Host "`nZoneName: $($_)"
+
+        $Existing = Get-AzPrivateDnsVirtualNetworkLink -ResourceGroupName $ResourceGroupName -ZoneName $_  -ErrorAction SilentlyContinue | Where-Object { $_.VirtualNetworkId -eq $vNetId }
+
+        if($Existing) {
+            Write-Host "Removing the existing link."
+            Remove-AzPrivateDnsVirtualNetworkLink -ResourceId $($Existing).ResourceId -ErrorAction Stop
+        } 
+
+        Write-Host "Subscription: $($sub)"
+        Write-Host "Link Name: $($linkName) & ID: $($vNetId)"
+        New-AzPrivateDnsVirtualNetworkLink -ZoneName $_ -ResourceGroupName $ResourceGroupName -Name $linkName -VirtualNetworkId $vNetId -ErrorAction Stop | Out-Null
     }
 
-} catch {
-    throw "Failed link creation. $($_)"
 }
