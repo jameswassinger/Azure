@@ -62,8 +62,11 @@ param(
 
     [Parameter(HelpMessage="Enter Private DNS Zone names that can be excluded from the private dns zone names discovery.")]
     [String[]]
-    $ExcludePrivateDnsZone
+    $ExcludePrivateDnsZone, 
 
+    [Parameter(HelpMessage="Enter Virtual Network names that can be excluded.")]
+    [String[]]
+    $ExcludeVNetName
 )
 
 # Script error handling. 
@@ -102,18 +105,20 @@ $allSubscriptions | ForEach-Object {
 
     if($VNET) {
         $VNET | ForEach-Object {
-            Write-Verbose "`nAdding entry"
-            Write-Verbose "Subscription: $($subName)"
-            Write-Verbose "VNet: $($_.Name)"
-            Write-Verbose "VNetId: $($_.Id)"
-            $vnetProperties.Add(
+            if($_.Name -notin $ExcludeVNetName) {
+                Write-Verbose "`nAdding entry"
+                Write-Verbose "Subscription: $($subName)"
+                Write-Verbose "VNet: $($_.Name)"
+                Write-Verbose "VNetId: $($_.Id)"  
+                              
+                $vnetProperties.Add(
                 [PSCustomObject]@{
                     subscriptionName = $subName
                     vnetName = $_.Name
                     vnetId = $_.Id
 
-                }
-            )
+                })
+            }
         }
     }
 }
