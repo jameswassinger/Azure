@@ -6,6 +6,6 @@
 **Remove-TypeUnknownRoleAssignements.ps1**
 > Finds and removes unknown role assignments. 
 
-**Set-AzPrivateDnsZone.ps1**
+**Set-AzPrivateDnsZoneVNetLink.ps1**
 > Create a VNet link to all Private DNS Zones. Recommended for a centralized Azure Private DNS setup. 
 
