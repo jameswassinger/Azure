@@ -1,3 +1,3 @@
-# Microsoft Azure
+# Azure ARM Templates
 ## Summary
-This project provides Azure ARM Templates, Policy Definitions, and maybe a tutorial or two.
+ Azure ARM Templates and Policy Definitions.
